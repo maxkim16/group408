@@ -1,0 +1,155 @@
+<!-- Navbar rendering -->
+<%= render "navbar" %>
+
+<!-- CONTENT -->
+<div class="body">
+  <!-- Class setup row -->
+  <div class="row">
+  	<!-- Input fields -->
+  	<div class="col-md-5">
+  		<div class="panel panel-default">
+  			<div class="panel-body">
+  			    <!--/main/class_schedule -> go to routes.rb post -->
+		  		<%= form_for @schedule, url: '/main/class_schedule', html: { method: :post} do |f| %>
+		  		    
+		  			<%= f.text_field :user, :class => "user-id-field", :value => @user.account %>
+		  			<div class="form-group">
+			          <label for="professor"><%= f.label :professor, "Professor" %></label>
+			          <%= f.text_field :professor, :class => "form-control" ,:id => "professor", :placeholder => "Professor Name" %>
+			        </div>
+			        <div class="form-group">
+			          <label for="class-name"><%= f.label :classname, "Class Name" %></label>
+			          <%= f.text_field :classname, :class => "form-control", :id => "class-name", :placeholder => "Class Name" %>
+			        </div>
+				    <div class="form-group">
+			          <label for="class-room"><%= f.label :classroom, "Class Room" %></label>
+			          <%= f.text_field :classroom, :class => "form-control" ,:id => "class-room", :placeholder => "Class Room" %>
+			        </div>
+			      	<div class="form-group">
+			          <label for="class-days"><%= f.label :day, "Class Days" %></label>
+			          <%= f.text_field :day, :class => "form-control" ,:id => "class-days", :placeholder => "MWF, TUTH..etc" %>
+			        </div>
+			        <div class="form-group">
+			          <label for="start-time"><%= f.label :hour, "Start Time" %></label>
+			          <%= f.number_field :hour, :min => 0, :max => 23, :class => "form-control", :id => "start-time", :placeholder => "Hour" %>
+			          <%= f.number_field :minute, :min => 0, :max => 59, :class => "form-control", :id => "start-time", :placeholder => "Minute" %>
+			        </div>
+			        <div class="form-group">
+			          <label for="end-time"><%= f.label :hour_end, "End Time" %></label>
+			          <%= f.number_field :hour_end, :min => 0, :max => 23, :class => "form-control" , :id => "end-time", :placeholder => "Hour" %>
+			          <%= f.number_field :minute_end, :min => 0, :max => 59, :class => "form-control", :id => "end-time", :placeholder => "Minute" %>
+			        </div>
+			        <%= f.submit "Add Class", :class => "btn btn-primary" %>  <!-- "SUBMIT" = f.submit -->
+			        <!-- Once you submit, go to route url(/main//_schedule) next to form_for @schedule underneath "panel-body" -->
+		  		<% end %>
+	  		</div>
+  		</div>
+  	</div>
+  	<!-- class column -->
+  	<div class="col-md-7">
+  		<div class="panel panel-info">
+  			<div class="panel-heading">My Classes</div>
+  			<div class="panel-body">
+  				<table class="table">
+  					<tr>
+  						<th>Class Name</th>
+  						<th>Class Room</th>
+  						<th>Instructor</th>
+  						<th>Class Days</th>
+  						<th>Start Time</th>
+  						<th>End Time</th>
+  						<th></th>
+  					</tr>
+  					<!-- Loop all the schedule in database -->
+	  			    <% @schedules.each do |schedule| %>
+	  			    	<!-- use if statement to filter out the logged in user's schedule but not other ppl's -->
+	  			    	<% if schedule.user == @user.account %> <!--@user is the current user -->
+				  	    		<tr>
+				  	    			<td><span class="class-info"><%= schedule.classname %></span></td>
+				  	    			<td><span class="class-info"><%= schedule.classroom %></span></td>
+				  	    			<td><span class="class-info"><%= schedule.professor %></span></td>
+				  	    			<td><span class="class-info"><%= schedule.day %></span></td>
+				  	    			<td>
+				  	    				<span class="class-info">
+				  	    					<!-- Handle the hour format -->
+				  	    					<% if schedule.hour.length < 2 %>
+				  	    						<!-- The hour is single digit, add another 0 in front of it -->
+				  	    						0<%= schedule.hour %>
+				  	    					<% else %>
+				  	    						<%= schedule.hour %>
+				  	    					<% end %>
+				  	    				</span>:
+				  	    				<span class="class-info">
+				  	    					<!-- Handle the minute format -->
+				  	    					<% if schedule.minute.length < 2 %>
+				  	    						<!-- The minute is single digit, add another 0 in front of it -->
+				  	    						0<%= schedule.minute %>
+				  	    					<% else %>
+				  	    						<%= schedule.minute %>
+				  	    					<% end %>
+				  	    				</span>
+
+				  	    			</td>
+				  	    			<td>
+				  	    				<span class="class-info">
+				  	    					<!-- Handle the hour format -->
+				  	    					<% if schedule.hour_end.length < 2 %>
+				  	    						<!-- The hour is single digit, add another 0 in front of it -->
+				  	    						0<%= schedule.hour_end %>
+				  	    					<% else %>
+				  	    						<%= schedule.hour_end %>
+				  	    					<% end %>
+				  	    				</span>:
+				  	    				<span class="class-info">
+				  	    					<!-- Handle the minute format -->
+				  	    					<% if schedule.minute_end.length < 2 %>
+				  	    						<!-- The minute is single digit, add another 0 in front of it -->
+				  	    						0<%= schedule.minute_end %>
+				  	    					<% else %>
+				  	    						<%= schedule.minute_end %>
+				  	    					<% end %>
+				  	    				</span>
+				  	    			</td>
+				  	    			<td>
+				  	    				<!-- REMOVAL button, using GET method to fetch the schedule id and delete it -->
+				  	    				<%= button_to "/main/class_schedule/#{schedule.id}", :class => "btn btn-danger btn-xs class-delete-button", method: :get do %>
+				  	    					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+				  	    				<% end %>
+				  	    			</td>
+					  	    	</tr>
+				  	    <% end %>
+				    <% end %>
+  				</table>
+  			</div>
+  		</div>
+  	</div>
+  </div>
+
+  <!-- schedule table row -->
+  <!-- get rid of this for now because its too complicated
+  <div class="row">
+  	<div class="col">
+  		<div class="panel panel-success">
+  			<div class="panel-heading">Weekly Schedule</div>
+  			<div class="panel-body">
+  				<table class="table table-bordered">
+  					<tr>
+  						<th>Time</th>
+  						<th>Mon</th>
+  						<th>Tue</th>
+  						<th>Wed</th>
+  						<th>Thu</th>
+  						<th>Fri</th>
+  					</tr>
+  					
+  				</table>
+  			</div>
+  		</div>
+  	</div>	
+  </div>
+	-->
+</div>
+
+<!-- Footer rendering -->
+<%= render "footer" %>
+

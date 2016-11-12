@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="panel panel-info">
+    <div class="panel-heading">User Register</div>
+    <div class="panel-body">
+
+      <!-- Generate error message -->
+      <% if session[:error] %>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Register Error!</strong> Something went wrong. Try again!
+        </div>
+        <% session[:error] = nil %>
+      <% end %>
+      
+      <!-- Register form -->
+      <%= form_for @user, url: "/register", html: { method: :post} do |f| %>   <!-- go to routes post register -->
+        <div class="form-group">
+          <label for="new-account"><%= f.label :account, "New Account" %></label>
+          <%= f.text_field :account, :class => "form-control" ,:id => "new-account", :placeholder => "Enter new account" %>
+        </div>
+        <div class="form-group">
+          <label for="new-password"><%= f.label :password, "New Password" %></label>
+          <%= f.password_field :password, :class => "form-control", :id => "new-password", :placeholder => "Enter new password" %>
+        </div>
+        <!--
+        <div class="form-group">
+          <label for="new-password2"><%= f.label :password, "Confirm Password" %></label>
+          <%= f.password_field :password_confirmation, :class => "form-control", :id => "new-password2", :placeholder => "Enter new password again" %>
+        </div>
+      -->
+        <%= f.submit "Register", :class => "btn btn-primary" %> <!--Click Register, then go to url: "/register", which is this current page -->
+      <% end %>
+      
+    </div>
+    <div class="panel-footer">
+      <h5>Already a user? Let's go <a href="/">Login</a> now!</h5>
+    </div>
+  <div>
+</div>

@@ -1,0 +1,48 @@
+// Place all the styles related to the main controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.body {
+	height: 100%;
+	margin: 3%;
+	margin-bottom: 250px;
+	
+	.form-group {
+		padding: 0;
+	}
+
+	.user-id-field {
+		display:none;
+	}
+
+	.class-delete-button {
+		background: rgba(0,0,0,0);
+		border: none;
+		color: red;
+	}
+}
+
+.footer {
+	position: relative;
+	height: 250px;
+	width: 100%;
+	bottom: 0;
+	padding: 1%;
+	background: black;
+	color: white;
+	text-align: center;
+	li {
+		list-style: none;
+		display: inline;
+		padding: 2%;
+	}
+
+	#footer-title {
+		margin-bottom: 2%;
+	}
+
+	#copyright-sec {
+		margin-top: 3%;
+	}
+}
+
